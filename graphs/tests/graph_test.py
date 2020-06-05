@@ -38,7 +38,9 @@ def test_add_edge():
     graph.add_edge(1, 2)
     assert len(graph) == 2
     assert len(graph.nodes) == 2
-    assert len(graph.edges) == 1
+    assert len(graph.edges) == 2
+    assert (1, 2) in graph.edges
+    assert (2, 1) in graph.edges
     assert graph.adj == {1: {2}, 2: {1}}
 
 
@@ -46,7 +48,7 @@ def test_add_multiple_edges():
     graph = Graph()
     graph.add_multiple_edges(((1, 2), (2, 3), (3, 4)))
     assert len(graph) == 4
-    assert len(graph.edges) == 3
+    assert len(graph.edges) == 6
     assert graph.adj == {1: {2}, 2: {1, 3}, 3: {2, 4}, 4: {3}}
 
     graph = Graph()
