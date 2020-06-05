@@ -1,57 +1,53 @@
-"""
-Class used to represent an Undirected Graph.
-Also serves as a base class for directed graphs.
-"""
+class Graph:
 
-from collections import deque
+    def __init__(self, directed=False, weighted=False):
+        self.directed = directed
+        self.weighted = weighted
+        self.nodes = set()
+        self.edges = set()
+        self.adj = {}
 
-from graphs.utils import backtrace_path
-from graphs.base_graph import UnweightedGraph
+    def __len__(self):
+        return len(self.nodes)
 
+    def add_node(self, node):
+        if node not in self.nodes:
+            self.nodes.add(node)
+            self.adj[node] = set()
 
-class Graph(UnweightedGraph):
+    def add_multiple_nodes(self, nodes):
+        for node in nodes:
+            self.add_node(node)
 
     def add_edge(self, node, other_node):
-        """
-        Adds a new edge to the graph, also adding the nodes in case they aren't
-        already in it
-        """
+        assert not self.weighted, 'Cannot insert unweighted edge in weighted graph'
+
         self.add_multiple_nodes([node, other_node])
 
         self.adj[node].add(other_node)
-        self.adj[other_node].add(node)
         self.edges.add((node, other_node))
-        self.edges.add((other_node, node))
+
+        if not self.directed:
+            self.adj[other_node].add(node)
+            self.edges.add((other_node, node))
 
     def add_multiple_edges(self, edges):
-        """
-        Add multiple edges to the graph, adding the nodes in case they aren't
-        already in it
-        """
         for node, other_node in edges:
             self.add_edge(node, other_node)
 
-    def is_connected(self):
-        """
-        Returns True if the graph is connected, False otherwise
-        """
-        visited = set()
-        node = next(iter(self.nodes))
-        self.depth_first_search(node, visited=visited)
+    def add_weighted_edge(self, node, other_node, weight):
+        assert self.weighted, 'Cannot insert weighted edge in unweighted graph'
 
-        return True if len(visited) == len(self) else False
+        self.add_multiple_nodes([node, other_node])
 
-    def depth_first_search(self, node=None, visited=None):
-        """
-        Performs a depth-first traversal of the graph, marking nodes that
-        have been seen in `visited`
-        """
-        if node is None:
-            node = next(iter(self.nodes))
+        self.adj[node].add((other_node, weight))
+        self.edges.add((node, other_node, weight))
 
-        if visited is None:
-            visited = set()
+        if not self.directed:
+            self.adj[other_node].add((node, weight))
+            self.edges.add((other_node, node, weight))
 
-        visited.add(node)
-        for next_node in (self.adj[node] - visited):
-            self.depth_first_search(next_node, visited)
+    def add_multiple_weighted_edges(self, edges):
+        for node, other_node, weight in edges:
+            self.add_weighted_edge(node, other_node, weight)
+
