@@ -1,6 +1,6 @@
 from collections import deque
 
-from graphs.utils import backtrace_path
+from graphs.algorithms.utils import backtrace_path
 
 
 def bfs_shortest_path(graph, start, end):
