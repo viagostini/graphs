@@ -18,17 +18,16 @@ class TestGraph:
         graph.add_edge(1, 2)
         assert len(graph) == 2
         assert len(graph.nodes) == 2
-        assert len(graph.edges) == 2
-        assert (1, 2) in graph.edges
-        assert (2, 1) in graph.edges
+        assert len(graph.edges) == 1
+        assert graph.contains_edge((1, 2))
         assert graph.adj == {1: {2}, 2: {1}}
 
     def test_add_node(self):
         graph = Graph()
         graph.add_node(1)
         graph.add_node(2)
-        assert 1 in graph.nodes
-        assert 2 in graph.nodes
+        assert graph.contains_node(1)
+        assert graph.contains_node(2)
         assert len(graph) == 2
         assert len(graph.nodes) == 2
         assert graph.adj == {1: set(), 2: set()}
@@ -48,7 +47,7 @@ class TestGraph:
         graph = Graph(directed=False, weighted=False)
         graph.add_multiple_edges(((1, 2), (2, 3), (3, 4)))
         assert len(graph) == 4
-        assert len(graph.edges) == 6
+        assert len(graph.edges) == 3
         assert graph.adj == {1: {2}, 2: {1, 3}, 3: {2, 4}, 4: {3}}
 
         graph = Graph()
@@ -74,16 +73,15 @@ class TestDigraph:
         assert len(graph) == 2
         assert len(graph.nodes) == 2
         assert len(graph.edges) == 1
-        assert (1, 2) in graph.edges
-        assert (2, 1) not in graph.edges
+        assert graph.contains_edge((1, 2))
         assert graph.adj == {1: {2}, 2: set()}
 
     def test_add_node(self):
         graph = Graph(directed=True)
         graph.add_node(1)
         graph.add_node(2)
-        assert 1 in graph.nodes
-        assert 2 in graph.nodes
+        assert graph.contains_node(1)
+        assert graph.contains_node(2)
         assert len(graph) == 2
         assert len(graph.nodes) == 2
         assert graph.adj == {1: set(), 2: set()}
@@ -100,12 +98,25 @@ class TestDigraph:
         assert graph.adj == {1: set(), 2: set(), 3: set(), 4: set(), 5: set()}
 
     def test_add_multiple_edges(self):
-        graph = Graph(directed=True, weighted=False)
+        graph = Graph(directed=False, weighted=False)
         graph.add_multiple_edges(((1, 2), (2, 3), (3, 4)))
         assert len(graph) == 4
         assert len(graph.edges) == 3
-        assert graph.adj == {1: {2}, 2: {3}, 3: {4}, 4: set()}
+        assert graph.adj == {1: {2}, 2: {1, 3}, 3: {2, 4}, 4: {3}}
 
         graph = Graph(directed=True, weighted=False)
         graph.add_multiple_edges([(1, 2), (2, 3), (3, 4)])
+        assert len(graph.edges) == 3
         assert graph.adj == {1: {2}, 2: {3}, 3: {4}, 4: set()}
+
+    def test_remove_edge(self):
+        graph = Graph(directed=False, weighted=False)
+        graph.add_multiple_edges(((1, 2), (2, 3), (3, 4)))
+        assert len(graph) == 4
+        assert len(graph.edges) == 3
+        assert graph.adj == {1: {2}, 2: {1, 3}, 3: {2, 4}, 4: {3}}
+
+        graph.remove_edge((1, 2))
+        assert len(graph) == 4
+        assert len(graph.edges) == 2
+        assert graph.adj == {1: set(), 2: {3}, 3: {2, 4}, 4: {3}}
