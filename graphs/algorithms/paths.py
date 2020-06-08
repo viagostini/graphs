@@ -1,8 +1,10 @@
 from collections import deque
 
 from graphs.algorithms.utils import backtrace_path
+from graphs.algorithms.decorators import expected_graph_type
 
 
+@expected_graph_type(weighted=False)
 def bfs_shortest_path(graph, start, end):
     """
     Returns one (of the possibly many) shortest paths from start node
