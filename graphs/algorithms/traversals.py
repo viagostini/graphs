@@ -8,3 +8,5 @@ def depth_first_search(graph, node=None, visited=None):
     visited.add(node)
     for next_node in (graph.adj[node] - visited):
         depth_first_search(graph, next_node, visited)
+
+    return visited
