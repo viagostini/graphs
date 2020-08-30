@@ -1,4 +1,4 @@
-from typing import Hashable, Optional
+from typing import Hashable, Iterator, Optional
 
 
 class Graph:
@@ -15,6 +15,9 @@ class Graph:
 
     def __contains__(self, key: Hashable) -> bool:
         return key in self._adj
+
+    def __iter__(self) -> Iterator:
+        return iter(self.nodes())
 
     def nodes(self) -> set:
         return set(self._adj.keys())

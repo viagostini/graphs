@@ -61,3 +61,12 @@ def test_add_weighted_edge():
 
     with pytest.raises(RuntimeError):
         graph.add_edge("São Paulo", "Minas Gerais", weight=None)
+
+
+def test_iteration():
+    """Iterating through nodes of a Graph should be possible"""
+    graph = Graph()
+    graph.add_edge(1, 2)
+    graph.add_edge(3, 4)
+    graph.add_edge(3, 2)
+    assert {node for node in graph} == graph.nodes()
