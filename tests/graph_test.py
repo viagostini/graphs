@@ -12,6 +12,7 @@ def test_default_graph():
 
 
 def test_add_node():
+    """Nodes can be added to a Graph if there isn't one with the same key already"""
     graph = Graph()
     graph.add_node("São Paulo")
     graph.add_node("Rio de Janeiro")
@@ -20,6 +21,8 @@ def test_add_node():
     assert "Rio de Janeiro" in graph
     assert "Minas Gerais" not in graph
 
+    with pytest.raises(RuntimeError):
+        graph.add_node("São Paulo")
 
 def test_add_undirected_edge():
     """

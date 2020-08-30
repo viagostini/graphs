@@ -26,6 +26,8 @@ class Graph:
         return self._adj[node]
 
     def add_node(self, key: Hashable) -> None:
+        if key in self:
+            raise RuntimeError("There is already a node with given key in Graph")
         self._adj[key] = set()
 
     def add_edge(
