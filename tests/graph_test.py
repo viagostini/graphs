@@ -24,6 +24,7 @@ def test_add_node():
     with pytest.raises(RuntimeError):
         graph.add_node("São Paulo")
 
+
 def test_add_undirected_edge():
     """
     When an edge (u, v) is added to an undirected Graph, the edge (v, u) is also added

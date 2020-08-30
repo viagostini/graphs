@@ -1,4 +1,4 @@
-from typing import Hashable, Iterable, Optional
+from typing import Hashable, Optional
 
 
 class Graph:
@@ -44,18 +44,17 @@ class Graph:
             self._add_unweighted_edge(node, other)
 
     def _add_weighted_edge(self, node: Hashable, other: Hashable, weight: int) -> None:
-        self._add_nodes_if_missing((node, other))
+        self._add_nodes_if_missing({node, other})
         self._adj[node].add((weight, other))
         if not self.directed:
             self._adj[other].add((weight, node))
 
     def _add_unweighted_edge(self, node: Hashable, other: Hashable) -> None:
-        self._add_nodes_if_missing((node, other))
+        self._add_nodes_if_missing({node, other})
         self._adj[node].add(other)
         if not self.directed:
             self._adj[other].add(node)
 
-    def _add_nodes_if_missing(self, nodes: Iterable[Hashable]) -> None:
-        for node in nodes:
-            if node not in self:
-                self.add_node(node)
+    def _add_nodes_if_missing(self, nodes: set) -> None:
+        for node in nodes - self.nodes():
+            self.add_node(node)
