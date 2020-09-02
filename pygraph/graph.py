@@ -8,7 +8,6 @@ class Graph:
         self.directed = directed
         self.weighted = weighted
         self._adj = {}
-        self._edges = set()
 
     def __len__(self) -> int:
         return len(self._adj)
@@ -21,9 +20,6 @@ class Graph:
 
     def nodes(self) -> set:
         return set(self._adj.keys())
-
-    def edges(self) -> set:
-        return self._edges
 
     def adjacency(self, node: Hashable) -> set:
         return self._adj[node]
