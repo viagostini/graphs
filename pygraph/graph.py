@@ -4,10 +4,22 @@ from typing import Hashable, Iterator, Optional
 class Graph:
     """Base class for all graphs. Represents an undirected, unweighted graph """
 
-    def __init__(self, directed: bool = False, weighted: bool = False) -> None:
-        self.directed = directed
-        self.weighted = weighted
-        self._adj = {}
+    def __init__(
+        self,
+        adjacency_dict: Optional[dict] = None,
+        directed: Optional[bool] = None,
+        weighted: Optional[bool] = None,
+    ) -> None:
+
+        if adjacency_dict and (directed is None or weighted is None):
+            raise RuntimeError(
+                "When building Graph from an adjacency dict, must pass `directed` and `weighted` arguments"
+            )
+
+        # we trust that it was called with proper directed and weighted arguments
+        self.directed = directed or False
+        self.weighted = weighted or False
+        self._adj = adjacency_dict if adjacency_dict is not None else {}
 
     def __len__(self) -> int:
         return len(self._adj)

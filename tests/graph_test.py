@@ -70,3 +70,34 @@ def test_iteration():
     graph.add_edge(3, 4)
     graph.add_edge(3, 2)
     assert {node for node in graph} == graph.nodes()
+
+
+def test_init_from_dict():
+    """Should be possible to build a Graph from an adjacency dict"""
+    graph = Graph(
+        {
+            "São Paulo": {"Rio de Janeiro", "Paraná"},
+            "Rio de Janeiro": {"São Paulo"},
+            "Paraná": {"São Paulo"},
+        },
+        directed=False,
+        weighted=False,
+    )
+
+    assert len(graph) == 3
+    assert "Paraná" in graph.adjacency("São Paulo")
+    assert "Rio de Janeiro" in graph.adjacency("São Paulo")
+    assert "São Paulo" in graph.adjacency("Paraná")
+    assert "São Paulo" in graph.adjacency("Rio de Janeiro")
+
+
+def test_init_from_dict_raises_without_graph_types():
+    """
+    When building a Graph from an adjacency dict, need to specify `directed` and
+    `weighted` properties
+    """
+    with pytest.raises(RuntimeError):
+        graph = Graph({"São Paulo": {"Rio de Janeiro"}})
+
+    with pytest.raises(RuntimeError):
+        graph = Graph({"São Paulo": {"Rio de Janeiro"}}, directed=False)
